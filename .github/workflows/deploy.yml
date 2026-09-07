@@ -1,6 +1,4 @@
 # Publica la Carpeta Didáctica en GitHub Pages cada vez que hacés push a main.
-# ⚠ Si en el repositorio ya existe .github/workflows/static.yml, borralo:
-# este archivo lo reemplaza.
 name: Publicar en GitHub Pages
 
 on:
@@ -22,19 +20,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
-
       - name: Instalar dependencias
         run: npm ci
-
-      # --base=./ hace que funcione en profelili.github.io/carpetadidactica
       - name: Compilar
         run: npm run build -- --base=./
-
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
