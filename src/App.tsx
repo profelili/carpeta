@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { StoreProvider, useStore } from "./store";
+import { StoreProvider, useStore } from "./storeSupabase";
 import type { Vista } from "./types";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./components/Dashboard";
@@ -21,25 +21,50 @@ const TITULOS: Record<Vista, string> = {
 };
 
 function ChipGuardado() {
-  const { guardando, savedAt } = useStore();
+  const { guardando, sincronizando, savedAt, usandoSupabase } = useStore();
+  
+  const estaProcesando = guardando || sincronizando;
+  const texto = sincronizando 
+    ? "Sincronizando…" 
+    : guardando 
+      ? "Guardando…" 
+      : usandoSupabase
+        ? savedAt 
+          ? `Sincronizado · ${savedAt}` 
+          : "Sincronizado en la nube"
+        : savedAt 
+          ? `Guardado · ${savedAt}` 
+          : "Guardado automático";
+  
+  const titulo = usandoSupabase
+    ? "Tus datos se sincronizan en la nube con Supabase"
+    : "Cada cambio se guarda solo en este dispositivo";
+  
   return (
     <div
       className={`hidden items-center gap-2 rounded-full border px-3 py-1.5 text-[11.5px] font-extrabold transition sm:flex ${
-        guardando
+        estaProcesando
           ? "border-lapizdeep/40 bg-lapiz/15 text-[#7a5a06]"
-          : "border-domi/25 bg-domi/8 text-domi"
+          : usandoSupabase
+            ? "border-hosp/25 bg-hosp/8 text-hosp"
+            : "border-domi/25 bg-domi/8 text-domi"
       }`}
-      title="Cada cambio se guarda solo en este dispositivo"
+      title={titulo}
     >
       <span className="relative flex h-2 w-2">
-        {!guardando && (
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-domi opacity-50" />
+        {!estaProcesando && (
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-50" style={{ background: usandoSupabase ? '#2f6fb2' : '#0e7c66' }} />
         )}
         <span
-          className={`relative inline-flex h-2 w-2 rounded-full ${guardando ? "animate-pulse bg-lapizdeep" : "bg-domi"}`}
+          className={`relative inline-flex h-2 w-2 rounded-full ${
+            sincronizando ? "animate-pulse bg-lapizdeep" : usandoSupabase ? "bg-hosp" : "bg-domi"
+          }`}
         />
       </span>
-      {guardando ? "Guardando…" : savedAt ? `Guardado · ${savedAt}` : "Guardado automático"}
+      {texto}
+      {usandoSupabase && !estaProcesando && (
+        <span className="text-[9px] opacity-70">☁️</span>
+      )}
     </div>
   );
 }
