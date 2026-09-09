@@ -1,15 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 
-// ⚠️ IMPORTANTE: Reemplazá estas credenciales con las de tu proyecto Supabase
-// Las encontrás en: Settings → API → Project URL y anon public key
-
+// Credenciales de Supabase configuradas
 const supabaseUrl = 'https://ovfwcbjkqtyeqkadvnlz.supabase.co';
-const supabaseAnonKey = 'REEMPLAZAR_CON_CLAVE_ANON_CORRECTA';
-
-// Verificar que las credenciales estén configuradas
-if (supabaseAnonKey === 'REEMPLAZAR_CON_CLAVE_ANON_CORRECTA') {
-  console.warn('⚠️ Supabase no configurado. Editá src/supabaseClient.ts con tus credenciales.');
-}
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im92ZndjYmprcXR5ZXFrYWR2bmx6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg5NjI0OTUsImV4cCI6MjEwNDUzODQ5NX0.Bf-BJvrb44xa2SJ9CZfutIhj5QUAO-xPbQK5WIABVpI';
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
